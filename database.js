@@ -5,10 +5,10 @@ config();
 
 
 const pool = mysql.createPool({
-    host: process.env.HOST,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE,
-    user: process.env.USER
+    host: process.env.MYSQL_ADDON_HOST,
+    password: process.env.MYSQL_ADDON_PASSWORD,
+    database: process.env.MYSQL_ADDON_DB,
+    user: process.env.MYSQL_ADDON_USER
 }).promise()
 
 let getProducts = async ()=>{
