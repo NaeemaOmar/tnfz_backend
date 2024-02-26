@@ -25,7 +25,7 @@ export default {
     deleteAUser: async (req, res) => {
         let id = req.params.id
         let deletedUser = await getAUser(id)
-        let deleteTheUser = await deleteProduct(id)
+        let deleteTheUser = await deleteUser(id)
         res.send(deletedUser)
     }
 }

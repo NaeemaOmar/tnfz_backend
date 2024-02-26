@@ -1,10 +1,16 @@
 import express from 'express'
-const router = express.Router()
 import userController from '../controller/users.js'
+
+const router = express.Router()
+
 router 
     .route('/')
         .get(userController.getAllUsers)
         .post(userController.addAUser)
         
-
+router 
+    .route('/:id')
+        .get(userController.getAUser)
+        .patch(userController.editAUser)
+        .delete(userController.deleteAUser)
 export default router

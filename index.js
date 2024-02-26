@@ -3,7 +3,6 @@ import {config} from 'dotenv'
 import cors from 'cors'
 import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
-import {deleteUser, editUser, addAUser, getAUser, getUsers} from './model/database.js'
 
 
 config();
