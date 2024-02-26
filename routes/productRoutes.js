@@ -1,5 +1,6 @@
 import express from 'express'
 import controller from '../controller/products.js'
+import userController from '../controller/users.js'
 
 const router = express.Router();
 
@@ -13,7 +14,6 @@ router
         .get(controller.getAProduct)
         .patch(controller.editAProduct)
         .delete(controller.deleteAProduct)
-
         
 
 export default router

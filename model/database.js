@@ -1,15 +1,6 @@
-import mysql from 'mysql2' 
-import {config} from 'dotenv'
+import productsConfig from '../config/config.js'
 
-config();
-
- 
-const pool = mysql.createPool({
-    host: process.env.MYSQL_ADDON_HOST,
-    password: process.env.MYSQL_ADDON_PASSWORD,
-    database: process.env.MYSQL_ADDON_DB,
-    user: process.env.MYSQL_ADDON_USER
-}).promise()
+const pool = productsConfig.pool
 
 let getProducts = async ()=>{
     let [productsArray] = await pool.query(`
@@ -20,6 +11,14 @@ let getProducts = async ()=>{
 }
 // console.log(await getProducts());
 
+let getUsers = async ()=>{
+    let [usersArray] = await pool.query(`
+    SELECT * FROM tnfz_users
+    `)
+    // console.log(usersArray)
+    return usersArray
+}
+// console.log(await getUsers());
 
 let getAProduct = async (id)=>{
     let [product] = await pool.query(`
@@ -28,6 +27,14 @@ let getAProduct = async (id)=>{
     return product
 }
 // console.log(await getAProduct(2));
+
+let getAUser = async (id)=>{
+    let [user] = await pool.query(`
+    SELECT * from tnfz_users WHERE userID = ?
+    `, [id])
+    return user
+}
+// console.log(await getAUser(2));
 
 let addAProduct = async (prodName, quantity, price, category, prodDesc, imgUrl) =>{
     let insertProd = await pool.query(`
@@ -47,6 +54,19 @@ let addAProduct = async (prodName, quantity, price, category, prodDesc, imgUrl) 
 //         attribute since the columns in the database all have a "NOT NULL" constraint
 
 // PROBLEM: This fx is not dynamic and requires ALL values to be present. This is necessary since the website will look untidy/uneven if there are some elements missing.
+
+let addAUser = async (username, hashedPassword, txtPassword) =>{
+    let insertUser = await pool.query(`
+    INSERT INTO tnfz_users (username, hashedPassword, txtPassword) VALUES (?, ?, ?)
+    `, [username, hashedPassword, txtPassword]) 
+    let [newUser] = await pool.query(`
+    SELECT * FROM tnfz_users WHERE username = ?
+    `, [username])
+    return newUser
+}
+// console.log(await addAUser("AddUserFx", "sadegtyuikolkjmngvfdsfrtyuik", "qwertyuioplkjhgfdsa"))
+
+
 
 let editProduct = async (id, prodName, quantity, price, category, prodDesc, imgUrl) => {
     if(prodName){
@@ -81,6 +101,23 @@ let editProduct = async (id, prodName, quantity, price, category, prodDesc, imgU
 
 // NOTE TO JODIE: This function needs a required at the id since it won't work w/out the product id. It also needs to be streamlined so that it takes as little line of code as possible
 
+let editUser = async (id, username, hashedPassword, txtPassword) => {
+    let editUsername = username ? await pool.query(`UPDATE tnfz_users SET username = ? WHERE userID = ?`, [username, id]) : console.log("There is no username to be updated")
+
+    let editTxtpassword = txtPassword ? await pool.query(`UPDATE tnfz_users SET txtPassword = ? WHERE userID = ?`, [txtPassword, id]) : console.log("There is no txtPassword to be updated")
+
+    let editHashpasword = hashedPassword ? await pool.query(`UPDATE tnfz_users SET hashedPassword = ? WHERE userID = ?`, [hashedPassword, id]) : console.log("There is no hashedPassword to be updated")
+
+    let editedUser = await getAUser(id)
+    return editedUser
+}
+
+// Test 1: does the 'true' condition work
+// await editUser(3, "Testing editUser() fx", 12, 15.32)
+
+// Test 2: does the 'false' condition work
+// await editUser(1, null, null, null, null, null)
+
 let deleteProduct = async (id) => {
     let deletedProduct = await getAProduct(id)
     let deleteTheProduct = await pool.query(`
@@ -88,7 +125,16 @@ let deleteProduct = async (id) => {
     `, [id])
     return deletedProduct
 }
-
 // console.log(await deleteProduct(13))
 
-export {getProducts, getAProduct, addAProduct, editProduct, deleteProduct}
+
+let deleteUser = async (id) => {
+    let deletedUser = await getAUser(id)
+    let deleteTheUser = await pool.query(`
+    DELETE FROM tnfz_users WHERE userID = ?
+    `, [id])
+    return deletedUser
+}
+// console.log(await deleteUser(5))
+
+export {getProducts, getAProduct, addAProduct, editProduct, deleteProduct, deleteUser, editUser, addAUser, getAUser, getUsers}

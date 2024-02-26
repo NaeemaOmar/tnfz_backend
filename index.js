@@ -1,8 +1,9 @@
 import express from 'express'
 import {config} from 'dotenv'
 import cors from 'cors'
-import {getProducts, getAProduct, addAProduct, editProduct, deleteProduct} from './database.js'
 import productRoutes from './routes/productRoutes.js'
+import userRoutes from './routes/userRoutes.js'
+import {deleteUser, editUser, addAUser, getAUser, getUsers} from './model/database.js'
 
 
 config();
@@ -13,11 +14,11 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/products', productRoutes)
+app.use('/users', userRoutes)
 
-// app.post('/add/product', async (req, res)=>{
-//     let {prodName, quantity, price, category, prodDesc, imgUrl} = req.body
-//     let theNewProduct = await addAProduct(prodName, quantity, price, category, prodDesc, imgUrl)
-//     res.send(theNewProduct)
+// app.get('/users', async(req, res)=>{
+//     let theUsers = await getUsers()
+//     res.send(theUsers)
 // })
 
 
@@ -56,7 +57,6 @@ const PORT = process.env.MYSQL_ADDON_PORT;
 // })
 
 // the http methods end here
-
 
 
 app.listen(PORT, ()=>{

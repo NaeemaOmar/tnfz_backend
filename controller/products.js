@@ -1,4 +1,4 @@
-import {getProducts, getAProduct, addAProduct, editProduct, deleteProduct} from '../database.js'
+import {getProducts, getAProduct, addAProduct, editProduct, deleteProduct} from '../model/database.js'
 
 export default {
     getAllProducts: async(req, res)=>{
