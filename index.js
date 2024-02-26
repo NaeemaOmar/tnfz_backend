@@ -18,10 +18,16 @@ app.use(express.json())
 app.use('/get', getRoutes)
 app.use('/delete', deleteRoutes)
 app.use('/edit', editRoutes)
-app.use('/add', addRoutes)
+app.use('/add', addRoutes) // commented out since it doesnt work
+
+// app.post('/add/product', async (req, res)=>{
+//     let {prodName, quantity, price, category, prodDesc, imgUrl} = req.body
+//     let theNewProduct = await addAProduct(prodName, quantity, price, category, prodDesc, imgUrl)
+//     res.send(theNewProduct)
+// })
 
 
-const PORT = process.env.PORT;
+const PORT = process.env.MYSQL_ADDON_PORT;
 
 // the http methods are w/in this comment
 

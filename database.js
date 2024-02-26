@@ -3,7 +3,7 @@ import {config} from 'dotenv'
 
 config();
 
-
+ 
 const pool = mysql.createPool({
     host: process.env.MYSQL_ADDON_HOST,
     password: process.env.MYSQL_ADDON_PASSWORD,
