@@ -11,10 +11,11 @@ export default {
         res.send(theProduct)
     },
     addAProduct: async (req, res)=>{
-        let {prodName, quantity, price, category, prodDesc, imgUrl} = req.body
-        let theNewProduct = await addAProduct(prodName, quantity, price, category, prodDesc, imgUrl)
         console.log('The addProduct fx is working now')
-        res.send(theNewProduct)
+        let {prodName, quantity, price, category, prodDesc, imgUrl} = req.body
+        // let theNewProduct = await addAProduct(prodName, quantity, price, category, prodDesc, imgUrl)
+        await addAProduct(prodName, quantity, price, category, prodDesc, imgUrl)
+        res.send(await getProducts())
     },
     editAProduct: async (req, res) => {
         let productID = req.params.id

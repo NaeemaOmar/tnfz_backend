@@ -2,10 +2,7 @@ import express from 'express'
 import {config} from 'dotenv'
 import cors from 'cors'
 import {getProducts, getAProduct, addAProduct, editProduct, deleteProduct} from './database.js'
-import getRoutes from './routes/getRoutes.js'
-import deleteRoutes from './routes/deleteRoutes.js'
-import editRoutes from './routes/editRoutes.js'
-import addRoutes from './routes/addRoutes.js'
+import productRoutes from './routes/productRoutes.js'
 
 
 config();
@@ -15,10 +12,7 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-app.use('/get', getRoutes)
-app.use('/delete', deleteRoutes)
-app.use('/edit', editRoutes)
-app.use('/add', addRoutes) // commented out since it doesnt work
+app.use('/products', productRoutes)
 
 // app.post('/add/product', async (req, res)=>{
 //     let {prodName, quantity, price, category, prodDesc, imgUrl} = req.body
