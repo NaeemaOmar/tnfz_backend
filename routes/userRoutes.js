@@ -13,4 +13,7 @@ router
         .get(userController.getAUser)
         .patch(userController.editAUser)
         .delete(userController.deleteAUser)
+router 
+    .route('/check')
+        .post(userController.checkAUser)
 export default router

@@ -1,4 +1,7 @@
-import {deleteUser, editUser, addAUser, getAUser, getUsers} from '../model/database.js'
+import bcrypt from 'bcrypt'
+import {deleteUser, editUser, addAUser, getAUser, getUsers, checkUser} from '../model/database.js'
+import jwt from 'jsonwebtoken'
+import cookieParser from 'cookie-parser'
 
 export default {
     getAllUsers: async(req, res)=>{
@@ -10,11 +13,40 @@ export default {
         let theUser = await getAUser(UserID)
         res.send(theUser)
     },
+    checkAUser: async (req, res)=>{
+        let {username, txtPassword} = req.body 
+        let checkUserExistence = await checkUser(username)
+        if (checkUserExistence.length > 0){
+            console.log("returned array has at least 1 items")
+            let [confirmedUser] = checkUserExistence
+            let storedHashPassword = confirmedUser.hashedPassword
+            let comparedPasswords = bcrypt.compare(txtPassword, storedHashPassword, (err, result)=>{
+                if (err){
+                    console.log(err)
+                } else{
+                    if (result){
+                        // const token = jwt.sign({username: username}, process.env.SECRET_KEY, {expiresIn: '1h'})
+                        console.log(`The passwords DO match. The username has been assigned the following token which will expire at 10am: ${token}`)
+                    } else {
+                        console.log("The passwords do NOT match")
+                    }
+                }
+            })
+            res.send(comparedPasswords)
+            // res.send(confirmedUser.hashedPassword)
+        } else {
+            console.log("returned array does not have any items")
+            res.send(`the following username does not exist: ${username}`)
+        }
+    },
     addAUser: async (req, res)=>{
         console.log('The addUser fx is working now')
-        let {username, hashedPassword, txtPassword} = req.body
-        await addAUser(username, hashedPassword, txtPassword)
-        res.send(await getUsers())
+        let {username, txtPassword} = req.body
+        await addAUser(username, txtPassword)
+        const token = jwt.sign({username: username}, process.env.SECRET_KEY, {expiresIn: '1h'})
+        console.log(`the following user "${username}" has been created, had its password hashed and was assigned the following token that expires at 11am : ${token}`)
+        res.cookie('jwt', token, {httpOnly: true})
+        res.send('The token was sent as a cookie')
     },
     editAUser: async (req, res) => {
         let UserID = req.params.id

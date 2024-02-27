@@ -1,6 +1,7 @@
-import productsConfig from '../config/config.js'
+import configPg from '../config/config.js'
+import bcrypt from 'bcrypt'
 
-const pool = productsConfig.pool
+const pool = configPg.pool
 
 let getProducts = async ()=>{
     let [productsArray] = await pool.query(`
@@ -32,9 +33,24 @@ let getAUser = async (id)=>{
     let [user] = await pool.query(`
     SELECT * from tnfz_users WHERE userID = ?
     `, [id])
+    console.log("The getAUser fx is running correctly")
     return user
 }
 // console.log(await getAUser(2));
+
+let checkUser = async (username)=>{
+    let [user] = await pool.query(`
+    SELECT * from tnfz_users WHERE username = ?
+    `, [username])
+    console.log("the checkUser fx definition is running correctly")
+    return user
+}
+// check true
+// console.log(await checkUser("Naeema"));
+// check false
+// console.log(await checkUser("kii kale"));
+
+
 
 let addAProduct = async (prodName, quantity, price, category, prodDesc, imgUrl) =>{
     let insertProd = await pool.query(`
@@ -55,17 +71,44 @@ let addAProduct = async (prodName, quantity, price, category, prodDesc, imgUrl) 
 
 // PROBLEM: This fx is not dynamic and requires ALL values to be present. This is necessary since the website will look untidy/uneven if there are some elements missing.
 
-let addAUser = async (username, hashedPassword, txtPassword) =>{
-    let insertUser = await pool.query(`
-    INSERT INTO tnfz_users (username, hashedPassword, txtPassword) VALUES (?, ?, ?)
-    `, [username, hashedPassword, txtPassword]) 
-    let [newUser] = await pool.query(`
-    SELECT * FROM tnfz_users WHERE username = ?
-    `, [username])
-    return newUser
-}
+// let addAUser = async (username, hashedPassword, txtPassword) =>{
+//     let insertUser = await pool.query(`
+//     INSERT INTO tnfz_users (username, hashedPassword, txtPassword) VALUES (?, ?, ?)
+//     `, [username, hashedPassword, txtPassword]) 
+//     let [newUser] = await pool.query(`
+//     SELECT * FROM tnfz_users WHERE username = ?
+//     `, [username])
+//     return newUser
+// }
 // console.log(await addAUser("AddUserFx", "sadegtyuikolkjmngvfdsfrtyuik", "qwertyuioplkjhgfdsa"))
 
+// const userByUsername = async (username)=>{
+//     let [user] = await pool.query(`
+//     SELECT * FROM tnfz_users WHERE username = ?
+//     `, [username])
+//     console.log(`This is the returned user: ${user}`)
+//     return user
+// } // The fx above is redundant coz checkUser already checks by username
+// console.log(await userByUsername('Jodie'))
+
+
+const addAUser = async(username, password)=>{
+    let hashedPassword = bcrypt.hash(password, 10, async(err, hash) => {
+        if (err){
+          console.error(err);  
+        } else {
+            console.log(`Hashed password is as follows: ${hash}`)
+            await pool.query(`
+            INSERT INTO tnfz_users (username, hashedPassword, txtPassword) 
+            VALUES (?, ?, ?)
+            `,[username, hash, password] )
+            console.log(`The following user was created: username = ${username}, password = ${password}, hashedPassword = ${hash}`)
+        }
+    }) // NOTE: Up till here runs correctly
+    let [createdUser] = await checkUser(username)
+    return createdUser
+}
+// console.log(await addAUser("AddUserFx5", "Boqorada5"))
 
 
 let editProduct = async (id, prodName, quantity, price, category, prodDesc, imgUrl) => {
@@ -135,6 +178,6 @@ let deleteUser = async (id) => {
     `, [id])
     return deletedUser
 }
-// console.log(await deleteUser(5))
+// console.log(await deleteUser(25))
 
-export {getProducts, getAProduct, addAProduct, editProduct, deleteProduct, deleteUser, editUser, addAUser, getAUser, getUsers}
+export {getProducts, getAProduct, addAProduct, editProduct, deleteProduct, deleteUser, editUser, addAUser, getAUser, getUsers, checkUser}

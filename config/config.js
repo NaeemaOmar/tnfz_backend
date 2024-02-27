@@ -8,7 +8,8 @@ export default {
         host: process.env.MYSQL_ADDON_HOST,
         password: process.env.MYSQL_ADDON_PASSWORD,
         database: process.env.MYSQL_ADDON_DB,
-        user: process.env.MYSQL_ADDON_USER
+        user: process.env.MYSQL_ADDON_USER,
+        connectionLimit: 30
     }).promise()
 }
  

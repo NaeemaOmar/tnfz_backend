@@ -3,6 +3,7 @@ import {config} from 'dotenv'
 import cors from 'cors'
 import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
+import cookieParser from 'cookie-parser'
 
 
 config();
@@ -11,6 +12,7 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
+app.use(cookieParser())
 
 app.use('/products', productRoutes)
 app.use('/users', userRoutes)
