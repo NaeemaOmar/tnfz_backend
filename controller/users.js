@@ -32,6 +32,7 @@ export default {
                     }
                 }
             })
+            //userAuth middleware = 1) create token, 2) check/verify token, 3) verify correct username and password
             res.send(comparedPasswords)
             // res.send(confirmedUser.hashedPassword)
         } else {
@@ -45,8 +46,14 @@ export default {
         await addAUser(username, txtPassword)
         const token = jwt.sign({username: username}, process.env.SECRET_KEY, {expiresIn: '1h'})
         console.log(`the following user "${username}" has been created, had its password hashed and was assigned the following token that expires at 11am : ${token}`)
-        res.cookie('jwt', token, {httpOnly: true})
-        res.send('The token was sent as a cookie')
+        try{
+            res.cookie('jwt', token, {httpOnly: true})
+            res.json({token})
+            // The line above returns the token in json form
+            res.send('The token was sent as a cookie')
+        }catch(error){
+            console.log(`This error was experienced: ${error}`)
+        }
     },
     editAUser: async (req, res) => {
         let UserID = req.params.id

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paths</title>
+</head>
+<body>
+    <h1 class="textCenter">These are the paths for manipulating the database</h1>
+    <h2 class="textCenter">Static Page</h2>
+    <table class="centerIt">
+        <tr>
+            <th>HTTP method</th>
+            <th>Path</th>
+            <th>Function of the path</th>
+        </tr>
+        <tr>
+            <td class="centerIt">NONE</td>
+            <td>/</td>
+            <td>Displays the static page</td>
+        </tr>     
+    </table>   
+    <h2 class="textCenter">Users</h2>
+    <table class="centerIt">
+        <tr>
+            <th>HTTP method</th>
+            <th>Path</th>
+            <th>Function of the path</th>
+        </tr>
+        <tr>
+            <td class="centerIt">get</td>
+            <td>/users</td>
+            <td>Returns all users in an array of objects</td>
+        </tr>
+        <tr>
+            <td class="centerIt">post</td>
+            <td>/users</td>
+            <td>Adds a new user</td>
+        </tr>
+        <tr>
+            <td class="centerIt">get</td>
+            <td>/users/:id</td>
+            <td>Returns a single user by id</td>
+        </tr>
+        <tr>
+            <td class="centerIt">delete</td>
+            <td>/users/:id</td>
+            <td>Deletes a single user by id</td>
+        </tr>
+        <tr>
+            <td class="centerIt">patch</td>
+            <td>/users/:id</td>
+            <td>Edits a single user by id</td>
+        </tr>
+    </table>
+    <h2 class="textCenter">Products</h2>
+    <table class="centerIt">
+        <tr>
+            <th>HTTP method</th>
+            <th>Path</th>
+            <th>Function of the path</th>
+        </tr>
+        <tr>
+            <td class="centerIt">get</td>
+            <td>/products</td>
+            <td>Returns all products in an array of objects</td>
+        </tr>
+        <tr>
+            <td class="centerIt">post</td>
+            <td>/products</td>
+            <td>Adds a new product</td>
+        </tr>
+        <tr>
+            <td class="centerIt">get</td>
+            <td>/products/:id</td>
+            <td>Returns a single product by id</td>
+        </tr>
+        <tr>
+            <td class="centerIt">delete</td>
+            <td>/products/:id</td>
+            <td>Deletes a single product by id</td>
+        </tr>
+        <tr>
+            <td class="centerIt">patch</td>
+            <td>/products/:id</td>
+            <td>Edits a single product by id</td>
+        </tr>
+    </table>
+</body>
+</html>
+
+<style>
+th, tr {
+    border: dotted;
+}
+td {
+    border: solid;
+}
+.centerIt {
+    display: flex;
+    justify-content: center;
+}
+.textCenter {
+    text-align: center;
+}
+
+</style>
